@@ -1,7 +1,7 @@
 """Core rules and state transitions for Mystery Island: The Lost Lighthouse."""
 
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List
 
 LOCATIONS = ("Beach", "Jungle", "Cave", "Old Bridge", "Lighthouse")
 STARTING_ENERGY = 5
@@ -22,7 +22,6 @@ class GameState:
     energy: int = STARTING_ENERGY
     inventory: List[str] = field(default_factory=list)
     decisions: Dict[str, str] = field(default_factory=dict)
-    clues: List[str] = field(default_factory=list)
     game_over: bool = False
     won: bool = False
 
