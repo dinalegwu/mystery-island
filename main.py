@@ -51,8 +51,6 @@ def run_game(input_fn=None, output_fn=print):
 
         elif choice == "2":
             write(get_status(state))
-            if state.clues:
-                write("Clues: " + "; ".join(state.clues))
 
         elif choice == "3":
             if state.location == "Beach":
