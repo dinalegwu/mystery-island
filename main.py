@@ -11,15 +11,15 @@ from game import (
 )
 
 
-def show_menu():
+def show_menu(output_fn=print):
     """Display the main game menu."""
     print("\nWhat would you like to do?")
-    print("1. Explore")
-    print("2. Check status and inventory")
-    print("3. Make a decision at this location")
-    print("4. Use an item")
-    print("5. Light the lighthouse beacon")
-    print("6. Quit")
+    output_fn("1. Explore")
+    output_fn("2. Check status and inventory")
+    output_fn("3. Make a decision at this location")
+    output_fn("4. Use an item")
+    output_fn("5. Light the lighthouse beacon")
+    output_fn("6. Quit")
 
 
 def run_game(input_fn=None, output_fn=print):
@@ -41,7 +41,7 @@ def run_game(input_fn=None, output_fn=print):
     write("Locations: " + " -> ".join(LOCATIONS))
 
     while not state.game_over and not state.won:
-        show_menu()
+        show_menu(write)
         choice = read("Choose an option: ").strip()
 
         if choice == "1":
