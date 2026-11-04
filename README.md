@@ -76,7 +76,8 @@ mystery-island/
 ├── game.py              # Game state and rules (no terminal input/output)
 ├── main.py              # Command-line interface and program entry point
 ├── tests/
-│   └── test_game.py     # Automated game-rule tests
+│   ├── test_game.py     # Automated game-rule tests
+│   └── test_cli.py      # Simulated command-line journeys
 ├── .github/
 │   └── workflows/
 │       └── tests.yml    # Automated tests on pushes and pull requests
