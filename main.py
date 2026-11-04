@@ -13,7 +13,7 @@ from game import (
 
 def show_menu(output_fn=print):
     """Display the main game menu."""
-    print("\nWhat would you like to do?")
+    output_fn("\nWhat would you like to do?")
     output_fn("1. Explore")
     output_fn("2. Check status and inventory")
     output_fn("3. Make a decision at this location")
