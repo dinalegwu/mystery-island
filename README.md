@@ -1,87 +1,91 @@
 # Mystery Island: The Lost Lighthouse
 
-A beginner-friendly, text-based Python adventure game. After a storm leaves you stranded on Mystery Island, explore the island, collect useful items, and restore the lighthouse beacon so you can be rescued.
+A text-based Python adventure game about survival, exploration, and restoring a lighthouse beacon after a storm.
+
+## Features
+
+- Five connected locations: Beach, Jungle, Cave, Old Bridge, and Lighthouse.
+- A state-based game engine separated from the command-line interface.
+- Energy management and item-gated progression.
+- One-time decisions at the Beach, Jungle, and Cave.
+- Collectible items, including the Lantern and Rope needed to complete the mission.
+- Reusable healing items and one-use shortcut maps.
+- Clear victory, game-over, and quit paths.
+- Automated unit tests using Python's standard library.
 
 ## Requirements
 
-- Python 3.8 or newer (the project uses only Python's standard library).
-- A terminal or command prompt.
+- Python 3.8 or newer.
+- No third-party packages are required.
 
-## Getting started
+## Run the game
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/dinalegwu/mystery-island.git
-   ```
-2. Move into the project directory:
-   ```bash
-   cd mystery-island
-   ```
-3. Start the game:
-   ```bash
-   python3 main.py
-   ```
+```bash
+python3 main.py
+```
 
-On Windows, you can use `python main.py` if `python3` is not available.
+On Windows, use `python main.py` if `python3` is unavailable.
 
-## How to play
-
-Enter your name when prompted, then choose an option from the menu:
-
-| Option | Action |
-| --- | --- |
-| 1 | Explore and enter a destination |
-| 2 | Check your inventory |
-| 3 | Try to light the lighthouse beacon |
-| 4 | Quit the game |
-
-The island has five locations, connected in this order:
-
-1. Beach
-2. Jungle
-3. Cave
-4. Old Bridge
-5. Lighthouse
-
-Movement is limited to a neighbouring location. You cannot jump over a location. Location names are accepted without regard to letter case.
-
-## Items and rules
-
-- You begin at the Beach with **5 energy points**.
-- Each successful move costs **1 energy point**. Invalid moves and attempts to stay in the same place do not use energy.
-- You find the **Lantern** when you first enter the Jungle.
-- You find the **Rope** when you first enter the Cave.
-- You need the Rope to travel from the Cave to the Old Bridge.
-- You need the Lantern to travel from the Old Bridge to the Lighthouse.
-- Items are added to your inventory only once.
-- You cannot move when your energy is zero.
-- To win, reach the Lighthouse with the Lantern and choose **Light the Lighthouse beacon**.
-- If your energy reaches zero before you complete the mission, the game ends.
-
-## Running the tests
-
-From the project root, run:
+## Run the tests
 
 ```bash
 python3 -m unittest discover -s tests -v
 ```
 
-The tests cover the movement function in `game.py`, including valid movement, invalid destinations, case-insensitive location matching, movement limits, and energy handling.
+## How to play
+
+1. Enter a player name.
+2. Choose **Explore** to travel to a neighbouring location.
+3. Check your status to see your energy and inventory.
+4. Make the special decision available at the Beach, Jungle, and Cave.
+5. Use an Energy Pack or Herbal Remedy when your energy is low.
+6. Reach the Lighthouse with the Lantern and light the beacon.
+
+### Locations and important items
+
+| Location | Discovery or requirement |
+| --- | --- |
+| Beach | Choose to salvage supplies or study a map. |
+| Jungle | Collect the Lantern; choose herbs or the ridge route. |
+| Cave | Collect the Rope; choose the dry ledge or the pool. |
+| Old Bridge | The Rope is required to continue. |
+| Lighthouse | The Lantern is required to light the beacon. |
+
+### Decisions
+
+- **Beach:** Salvage an Energy Pack for later recovery, or study a Weathered Map to make one move free.
+- **Jungle:** Gather a Herbal Remedy, or climb the ridge to obtain a one-use shortcut map.
+- **Cave:** Search the dry ledge for a Crystal, or search the pool for a Pearl at the cost of energy.
+
+Each location decision can be made only once per play-through.
+
+### Energy rules
+
+- You start with 5 energy; the maximum is 5.
+- A normal successful move costs 1 energy.
+- A map makes one successful move free and is then consumed.
+- The Cave pool decision costs 1 energy.
+- Energy Packs restore up to 2 energy; Herbal Remedies restore up to 1.
+- Invalid moves and blocked routes do not consume energy.
+- Running out of energy before completing the mission ends the game.
 
 ## Project structure
 
 ```text
 mystery-island/
-├── main.py              # Game menu and main gameplay loop
-├── game.py              # Location list and player movement logic
+├── game.py              # Game state and rules (no terminal input/output)
+├── main.py              # Command-line interface and program entry point
 ├── tests/
-│   └── test_game.py     # Automated tests for movement
+│   └── test_game.py     # Automated game-rule tests
+├── .github/
+│   └── workflows/
+│       └── tests.yml    # Automated tests on pushes and pull requests
 ├── .gitignore
 └── README.md
 ```
 
-## Current scope and known limitations
+## Design notes
 
-This is an introductory command-line project. The automated test suite currently tests the movement function; the interactive menu, item collection, item gates, and complete win/loss journeys are not yet covered by automated tests. Those are useful next improvements.
+The game engine lives in `game.py` and works with a `GameState` object. The interface lives in `main.py`. This separation makes game rules easier to test without simulating a player's keyboard input. The `run_game` function accepts injectable input and output functions for future command-line integration tests.
 
-The game currently uses a fixed island route and a small menu rather than a saved game system. Player progress is not stored after the program exits.
+The project intentionally uses only the Python standard library. Save files, graphical interfaces, sound, and online features are outside the current scope.
