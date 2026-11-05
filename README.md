@@ -34,12 +34,24 @@ python3 -m unittest discover -s tests -v
 
 ## How to play
 
-1. Enter a player name.
-2. Choose **Explore** to travel to a neighbouring location.
-3. Check your status to see your energy and inventory.
-4. Make the special decision available at the Beach, Jungle, and Cave.
-5. Use an Energy Pack or Herbal Remedy when your energy is low.
-6. Reach the Lighthouse with the Lantern and light the beacon.
+1. Enter a player name when the game starts.
+2. Use the numbered menu to choose an action:
+
+   | Option | Action |
+   | --- | --- |
+   | 1 | Explore and travel to a neighbouring location. |
+   | 2 | Check your current location, energy, and inventory. |
+   | 3 | Make the special decision at the Beach, Jungle, or Cave. |
+   | 4 | Use an available healing item from your inventory. |
+   | 5 | Light the lighthouse beacon when you reach the Lighthouse with the Lantern. |
+   | 6 | Quit the game. |
+
+3. Travel one connected location at a time. You cannot skip directly to a distant location.
+4. Successful normal travel costs 1 energy. Invalid destinations and blocked routes do not cost energy.
+5. Make each location's special decision only once. The game prevents a second decision at the same location.
+6. Check your status regularly. The status line shows your location, current energy, and inventory.
+7. When using an item, choose its displayed full name (for example, `Herbal Remedy` or `Energy Pack`). Only healing items you own and can currently use are listed; healing items are not usable when your energy is already full.
+8. Reach the Lighthouse with the Lantern and choose the beacon option to win.
 
 ### Locations and important items
 
