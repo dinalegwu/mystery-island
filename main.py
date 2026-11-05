@@ -1,85 +1,108 @@
-from game import move_player
+"""Command-line interface for Mystery Island: The Lost Lighthouse."""
 
-print("MYSTERY ISLAND: THE LOST LIGHTHOUSE")
+from game import (
+    LOCATIONS,
+    get_status,
+    light_beacon,
+    make_decision,
+    move_player,
+    new_game,
+    use_item,
+)
 
-player_name = input("Enter your name: ")
-print(f"Welcome to Mystery Island, {player_name}!")
 
-energy = 5
-location = "Beach"
-inventory = []
+def show_menu(output_fn=print):
+    """Display the main game menu."""
+    output_fn("\nWhat would you like to do?")
+    output_fn("1. Explore")
+    output_fn("2. Check status and inventory")
+    output_fn("3. Make a decision at this location")
+    output_fn("4. Use an item")
+    output_fn("5. Light the lighthouse beacon")
+    output_fn("6. Quit")
 
-print(f"Energy: {energy}")
-print(f"Location: {location}")
-print(f"Inventory: {inventory}")
 
-running = True
+def run_game(input_fn=input, output_fn=print):
+    """Run one complete play-through with injectable input and output."""
+    output_fn("=" * 48)
+    output_fn("MYSTERY ISLAND: THE LOST LIGHTHOUSE")
+    output_fn("=" * 48)
+    output_fn(
+        "A storm has stranded you on a remote island. "
+        "Find the tools, make wise choices, and restore the beacon."
+    )
 
-while running:
-    print("1. Explore")
-    print("2. Check inventory")
-    print("3. Light the Lighthouse beacon")
-    print("4. Quit game")
+    state = new_game(input_fn("Enter your name: "))
+    output_fn("\nWelcome, {}!".format(state.player_name))
+    output_fn("You begin on the Beach with 5 energy.")
+    output_fn("Locations: " + " -> ".join(LOCATIONS))
 
-    choice = input("Choose an option: ")
+    while not state.game_over and not state.won:
+        show_menu(output_fn)
+        choice = input_fn("Choose an option: ").strip()
 
-    if choice == "1":
-        print("Available locations:", [
-            "Beach", "Jungle", "Cave", "Old Bridge", "Lighthouse"
-        ])
+        if choice == "1":
+            output_fn("\nLocations: " + ", ".join(LOCATIONS))
+            destination = input_fn("Where would you like to go? ")
+            output_fn(move_player(state, destination))
 
-        destination = input("Enter location: ").strip()
+        elif choice == "2":
+            # The status is displayed once at the end of this loop.
+            pass
 
-        if (
-            location == "Cave"
-            and destination.casefold() == "old bridge"
-            and "Rope" not in inventory
-        ) or (
-            location == "Old Bridge"
-            and destination.casefold() == "lighthouse"
-            and "Lantern" not in inventory
-        ):
-            print("You don't have the required item to continue!")
-            message = "Movement blocked!"
+        elif choice == "3":
+            if state.location == "Beach":
+                output_fn("Beach decision: 'salvage' or 'map'")
+            elif state.location == "Jungle":
+                output_fn("Jungle decision: 'herbs' or 'ridge'")
+            elif state.location == "Cave":
+                output_fn("Cave decision: 'ledge' or 'pool' (pool costs energy)")
+            else:
+                output_fn("There is no special decision at this location.")
+                output_fn(get_status(state))
+                continue
+            decision = input_fn("Your choice: ")
+            output_fn(make_decision(state, decision))
+
+        elif choice == "4":
+            usable_items = [
+                item for item in ("Energy Pack", "Herbal Remedy")
+                if item in state.inventory
+            ]
+            if state.energy >= 5:
+                usable_items = []
+
+            if not usable_items:
+                output_fn("You have no usable items right now.")
+            else:
+                output_fn("Usable items: " + ", ".join(usable_items))
+                item = input_fn("Which item would you like to use? ")
+                output_fn(use_item(state, item))
+
+        elif choice == "5":
+            output_fn(light_beacon(state))
+
+        elif choice == "6":
+            output_fn("You leave the island behind. Thanks for playing!")
+            break
 
         else:
-            location, energy, message = move_player(
-                location, destination, energy
-            )
+            output_fn("Invalid menu option. Enter a number from 1 to 6.")
 
-        print(message)
-        print(f"Current location: {location}")
-        print(f"Energy remaining: {energy}")
+        output_fn(get_status(state))
 
-        if message == "Movement successful!":
-            if location == "Cave":
-                if "Rope" not in inventory:
-                    inventory.append("Rope")
-                    print("You found a Rope!")
+    if state.won:
+        output_fn("\nMISSION COMPLETE")
+    elif state.game_over:
+        output_fn("\nGAME OVER — your energy has run out.")
 
-            if location == "Jungle":
-                if "Lantern" not in inventory:
-                    inventory.append("Lantern")
-                    print("You found a Lantern!")
+    return state
 
-    elif choice == "2":
-        print(f"Your inventory: {inventory}")
 
-    elif choice == "3":
-        if location == "Lighthouse" and "Lantern" in inventory:
-            print("The Lighthouse beacon is now shining!")
-            print("Congratulations! You have been rescued!")
-            running = False
-        else:
-            print("You need to be at the Lighthouse and have a Lantern!")
+def main():
+    """Program entry point."""
+    run_game()
 
-    elif choice == "4":
-        print("Goodbye!")
-        running = False
 
-    else:
-        print("Invalid choice. Try again.")
-
-    if energy == 0 and running:
-        print("You have run out of energy. Game Over!")
-        running = False
+if __name__ == "__main__":
+    main()
