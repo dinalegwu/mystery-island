@@ -11,80 +11,80 @@ from game import (
 )
 
 
-def show_menu():
+def show_menu(output_fn=print):
     """Display the main game menu."""
-    print("\nWhat would you like to do?")
-    print("1. Explore")
-    print("2. Check status and inventory")
-    print("3. Make a decision at this location")
-    print("4. Use an item")
-    print("5. Light the lighthouse beacon")
-    print("6. Quit")
+    output_fn("\nWhat would you like to do?")
+    output_fn("1. Explore")
+    output_fn("2. Check status and inventory")
+    output_fn("3. Make a decision at this location")
+    output_fn("4. Use an item")
+    output_fn("5. Light the lighthouse beacon")
+    output_fn("6. Quit")
 
 
-def run_game():
-    """Run one complete play-through; injectable I/O makes it testable."""
-    
-
-    print("=" * 48)
-    print("MYSTERY ISLAND: THE LOST LIGHTHOUSE")
-    print("=" * 48)
-    print(
+def run_game(input_fn=input, output_fn=print):
+    """Run one complete play-through with injectable input and output."""
+    output_fn("=" * 48)
+    output_fn("MYSTERY ISLAND: THE LOST LIGHTHOUSE")
+    output_fn("=" * 48)
+    output_fn(
         "A storm has stranded you on a remote island. "
         "Find the tools, make wise choices, and restore the beacon."
     )
 
-    state = new_game(input("Enter your name: "))
-    print("\nWelcome, {}!".format(state.player_name))
-    print("You begin on the Beach with 5 energy.")
-    print("Locations: " + " -> ".join(LOCATIONS))
+    state = new_game(input_fn("Enter your name: "))
+    output_fn("\nWelcome, {}!".format(state.player_name))
+    output_fn("You begin on the Beach with 5 energy.")
+    output_fn("Locations: " + " -> ".join(LOCATIONS))
 
     while not state.game_over and not state.won:
-        show_menu()
-        choice = input("Choose an option: ").strip()
+        show_menu(output_fn)
+        choice = input_fn("Choose an option: ").strip()
 
         if choice == "1":
-            print("\nLocations: " + ", ".join(LOCATIONS))
-            destination = input("Where would you like to go? ")
-            print(move_player(state, destination))
+            output_fn("\nLocations: " + ", ".join(LOCATIONS))
+            destination = input_fn("Where would you like to go? ")
+            output_fn(move_player(state, destination))
 
         elif choice == "2":
-            print(get_status(state))
+            # The status is displayed once at the end of this loop.
+            pass
 
         elif choice == "3":
             if state.location == "Beach":
-                print("Beach decision: 'salvage' or 'map'")
+                output_fn("Beach decision: 'salvage' or 'map'")
             elif state.location == "Jungle":
-                print("Jungle decision: 'herbs' or 'ridge'")
+                output_fn("Jungle decision: 'herbs' or 'ridge'")
             elif state.location == "Cave":
-                print("Cave decision: 'ledge' or 'pool' (pool costs energy)")
+                output_fn("Cave decision: 'ledge' or 'pool' (pool costs energy)")
             else:
-                print("There is no special decision at this location.")
+                output_fn("There is no special decision at this location.")
+                output_fn(get_status(state))
                 continue
-            decision = input("Your choice: ")
-            print(make_decision(state, decision))
+            decision = input_fn("Your choice: ")
+            output_fn(make_decision(state, decision))
 
         elif choice == "4":
-            print("Usable items: Energy Pack, Herbal Remedy")
-            item = input("Which item would you like to use? ")
-            print(use_item(state, item))
+            output_fn("Usable items: Energy Pack, Herbal Remedy")
+            item = input_fn("Which item would you like to use? ")
+            output_fn(use_item(state, item))
 
         elif choice == "5":
-            print(light_beacon(state))
+            output_fn(light_beacon(state))
 
         elif choice == "6":
-            print("You leave the island behind. Thanks for playing!")
+            output_fn("You leave the island behind. Thanks for playing!")
             break
 
         else:
-            print("Invalid menu option. Enter a number from 1 to 6.")
+            output_fn("Invalid menu option. Enter a number from 1 to 6.")
 
-        print(get_status(state))
+        output_fn(get_status(state))
 
     if state.won:
-        print("\nMISSION COMPLETE")
+        output_fn("\nMISSION COMPLETE")
     elif state.game_over:
-        print("\nGAME OVER — your energy has run out.")
+        output_fn("\nGAME OVER — your energy has run out.")
 
     return state
 
