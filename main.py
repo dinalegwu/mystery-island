@@ -65,9 +65,19 @@ def run_game(input_fn=input, output_fn=print):
             output_fn(make_decision(state, decision))
 
         elif choice == "4":
-            output_fn("Usable items: Energy Pack, Herbal Remedy")
-            item = input_fn("Which item would you like to use? ")
-            output_fn(use_item(state, item))
+            usable_items = [
+                item for item in ("Energy Pack", "Herbal Remedy")
+                if item in state.inventory
+            ]
+            if state.energy >= 5:
+                usable_items = []
+
+            if not usable_items:
+                output_fn("You have no usable items right now.")
+            else:
+                output_fn("Usable items: " + ", ".join(usable_items))
+                item = input_fn("Which item would you like to use? ")
+                output_fn(use_item(state, item))
 
         elif choice == "5":
             output_fn(light_beacon(state))
