@@ -40,9 +40,22 @@ class TestCommandLineGame(unittest.TestCase):
         self.assertIn("MISSION COMPLETE", output)
         self.assertIn("rescue boat", output)
 
-    def test_wrong_item_use_does_not_crash(self):
-        state, output = self.run_with_inputs(["Dorcas", "4", "Lantern", "6"])
-        self.assertIn("cannot be used", output)
+    def test_item_menu_shows_only_items_in_inventory(self):
+        state, output = self.run_with_inputs([
+            "Dorcas",
+            "1", "Jungle",
+            "3", "herbs",
+            "4", "Herbal Remedy",
+            "6",
+        ])
+        self.assertIn("Usable items: Herbal Remedy", output)
+        self.assertNotIn("Usable items: Energy Pack", output)
+        self.assertNotIn("Usable items: Energy Pack, Herbal Remedy", output)
+        self.assertNotIn("Herbal Remedy", state.inventory)
+
+    def test_item_menu_explains_when_no_items_are_usable(self):
+        state, output = self.run_with_inputs(["Dorcas", "4", "6"])
+        self.assertIn("You have no usable items right now.", output)
         self.assertFalse(state.won)
 
 
