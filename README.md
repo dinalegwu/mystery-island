@@ -102,3 +102,62 @@ mystery-island/
 The game engine lives in `game.py` and works with a `GameState` object. The interface lives in `main.py`. This separation makes game rules easier to test without simulating a player's keyboard input. The `run_game` function accepts injectable input and output functions for future command-line integration tests.
 
 The project intentionally uses only the Python standard library. Save files, graphical interfaces, sound, and online features are outside the current scope.
+
+## Completion evidence
+
+### Repository and version details
+
+- **GitHub repository:** https://github.com/dinalegwu/mystery-island
+- **Working branch submitted for review:** `odogwu`
+- **Final commit SHA:** After the final commit, run `git log -1 --format=%H` and paste the full result here.
+- **Python version used for testing:** Run `python3 --version` and record the exact output here.
+
+### Run instructions
+
+From the repository folder, run the game:
+
+```bash
+python3 main.py
+```
+
+Run the automated tests:
+
+```bash
+python3 -m unittest discover -s tests -v
+```
+
+### Test evidence
+
+The latest test result reported during local testing was:
+
+```text
+Ran 25 tests in 0.001s
+
+OK
+```
+
+Run the tests again before submission and replace this with the exact output from your final run if it differs.
+
+### AI learning log
+
+Complete both entries using your own words and the experiments you actually performed.
+
+**Entry 1**
+
+- **Topic:** [Name the Python or game-development concept.]
+- **What AI said:** [Briefly explain the guidance AI gave you.]
+- **Your experiment:** [Describe the code you tried or the test you ran.]
+- **Your conclusion:** [Explain what you learned from the result.]
+
+**Entry 2**
+
+- **Topic:** [Name a different concept.]
+- **What AI said:** [Briefly explain the guidance AI gave you.]
+- **Your experiment:** [Describe the code you tried or the test you ran.]
+- **Your conclusion:** [Explain what you learned from the result.]
+
+### Personal reflection
+
+Complete this paragraph in your own words:
+
+> The concept I understand now that I didn't before is... [Explain the concept, what confused you at first, and what helped you understand it.]
